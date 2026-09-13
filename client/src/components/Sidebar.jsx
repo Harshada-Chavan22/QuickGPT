@@ -17,6 +17,7 @@ const Sidebar = () => {
         </button>
 
         {/* Search Conversations */}
+
         <div className= 'flex items-center gap-2 p-3 mt-4 border border-gray-400 dark:border-white/20 rounded-md'>
             <img src={assets.search_icon} alt="" className='w-4 not-dark:invert' />
             <input type="text" placeholder='Search Conversations' className='text-xs placeholder:text-gray-400 outline-none' value={search} onChange={(e) => setSearch(e.target.value)} />
@@ -24,9 +25,21 @@ const Sidebar = () => {
 
         {/* Recent Chats */}
     {chats.length >0 && <p className='mt-4 text-sm'>Recent Chats</p>}
-    <div>
+    <div className='flex-1 overflow-y-scroll mt-3 text-sm space-y-3'>
         {
-            chats.filter((chat)=> chat.messages[0] ? chat.messages[0]?.content.toLowerCase().includes(search.toLowerCase()))
+            chats.filter((chat)=> chat.messages[0] ? chat.messages[0]?.content.toLowerCase().includes(search.toLowerCase()) : chat.name.toLowerCase().includes(search.toLowerCase())).map((chat)=> (
+                <div key={chat.id} className='p-2 px-4 dark:bg-[#57317C]/10 border border-gray-300 dark:border-[#80609F]/15 rounded-md cursor-pointer flex justify-between group'>
+                    <div>
+                        <p className='truncate w-full'>
+                            {chat.messages.length >0 ? chat.messages[0].content.slice(0,32) : chat.name}
+                        </p>
+                        <p className='text-xs text-gray-500 dark:text-[#B1A6C0]'>
+                            {chat.updatedAt}
+                        </p>
+                    </div>
+                    <img src={assets.bin_icon} alt="" className='hidden group-hover:block w-4 cursor-pointer not-dark:invert' />
+                </div>
+            ))
         }
     </div>
     </div>
