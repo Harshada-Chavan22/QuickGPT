@@ -1,10 +1,11 @@
 import React, {useState} from 'react'
 import { useAppContext } from '../context/AppContext'
 import {assets} from '../assets/assets'
+import moment from 'moment' 
 
 const Sidebar = () => {
 
-    const {chats, selectedChat, theme, setTheme, user} = useAppContext()
+    const {chats, selectedChat, theme, setTheme, user, navigate} = useAppContext()
     const [search, setSearch] = useState('')
   return (
     <div className='flex flex-col h-screen min-w-72 p-5 dark:bg-gradient-to-b from-[#242124]/30 to-[#000000]/30 border-r border-[#80609F]/30 backdrop-blur-3xl transition-all duration-500 max-md:absolute left-0 z-1'>
@@ -34,7 +35,7 @@ const Sidebar = () => {
                             {chat.messages.length >0 ? chat.messages[0].content.slice(0,32) : chat.name}
                         </p>
                         <p className='text-xs text-gray-500 dark:text-[#B1A6C0]'>
-                            {chat.updatedAt}
+                            {moment(chat.updatedAt).fromNow()}
                         </p>
                     </div>
                     <img src={assets.bin_icon} alt="" className='hidden group-hover:block w-4 cursor-pointer not-dark:invert' />
@@ -42,6 +43,16 @@ const Sidebar = () => {
             ))
         }
     </div>
+
+     {/* Community Images */}
+     <div onClick={()=> {Navigate('/community')}} className='flex items-center gap-2 p-3 mt-4 border border-gray-300 dark:border-white/15 rounded-md cursor-pointer hover:scale-103 transition-all'>
+        <img src={assets.gallery_icon} alt="" className='w-4.5 not-dark:invert' />
+        <div className='flex flex-col text-sm'>
+            <p>
+                Community Images
+            </p>
+        </div>
+     </div>
     </div>
 
     
