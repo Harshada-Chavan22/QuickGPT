@@ -36,3 +36,4 @@ export const protect = async (req, res, next) => {
         });
     }
 };
+//auth is required
