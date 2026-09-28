@@ -5,4 +5,4 @@ const openai = new OpenAI({
     baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/"
 });
 
-export default openai
+export default openai;
