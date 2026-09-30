@@ -100,3 +100,4 @@ export const imageMessageController = async(removeEventListener, res)=>{
         res.json({success: false, message: error.message});
     }
 }
+//this is the solution for the actual workflow
