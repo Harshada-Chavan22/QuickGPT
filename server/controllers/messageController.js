@@ -101,3 +101,7 @@ export const imageMessageController = async(removeEventListener, res)=>{
     }
 }
 //this is the solution for the actual workflow
+//that's why the program is structured in this way, to ensure that the user has enough credits before proceeding with the AI generation and to handle the image generation and upload process seamlessly.
+//so, the workflow is as follows:
+//1. Check if the user has enough credits to use the feature (1 credit for text, 2 credits for image).
+//2. If the user has enough credits, proceed with the AI generation (text or image).            
