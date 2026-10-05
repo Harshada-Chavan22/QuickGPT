@@ -105,4 +105,5 @@ export const imageMessageController = async(removeEventListener, res)=>{
 //so, the workflow is as follows:
 //1. Check if the user has enough credits to use the feature (1 credit for text, 2 credits for image).
 //2. If the user has enough credits, proceed with the AI generation (text or image).      
-//3. For text messages, send the prompt to the OpenAI API and get the response, then save it to the chat and deduct 1 credit from the user.      
+//3. For text messages, send the prompt to the OpenAI API and get the response, then save it to the chat and deduct 1 credit from the user.  
+//4. For image messages, send the prompt to ImageKit for AI image generation, convert the response to base64, upload it to ImageKit's media library, save the URL to the chat, and deduct 2 credits from the user.    
