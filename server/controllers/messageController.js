@@ -104,4 +104,5 @@ export const imageMessageController = async(removeEventListener, res)=>{
 //that's why the program is structured in this way, to ensure that the user has enough credits before proceeding with the AI generation and to handle the image generation and upload process seamlessly.
 //so, the workflow is as follows:
 //1. Check if the user has enough credits to use the feature (1 credit for text, 2 credits for image).
-//2. If the user has enough credits, proceed with the AI generation (text or image).            
+//2. If the user has enough credits, proceed with the AI generation (text or image).      
+//3. For text messages, send the prompt to the OpenAI API and get the response, then save it to the chat and deduct 1 credit from the user.      
