@@ -48,3 +48,4 @@ export const deleteChat = async(req, res)=>{
         res.json({success: false, error: error.message});
     }
 }
+//this is the api controller for updating a chat name
