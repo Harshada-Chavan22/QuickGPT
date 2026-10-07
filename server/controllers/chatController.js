@@ -49,3 +49,4 @@ export const deleteChat = async(req, res)=>{
     }
 }
 //this is the api controller for updating a chat name
+//api controller for updating a chat name
