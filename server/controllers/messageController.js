@@ -46,7 +46,7 @@ export const textMessageController = async (req, res) => {
 
 // image generation message controller
 
-export const imageMessageController = async(removeEventListener, res)=>{
+export const imageMessageController = async(req, res)=>{
     try{
         const userId = req.user._id;
 
