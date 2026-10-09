@@ -1,7 +1,5 @@
 import Chat from "../models/Chat.js"
 import User from "../models/User.js"
-import axios from "axios"
-import imagekit from "../configs/imagekit.js"
 import openai from "../configs/openai.js"
 
 //text based AI chat message controller
@@ -46,60 +44,80 @@ export const textMessageController = async (req, res) => {
 
 // image generation message controller
 
-export const imageMessageController = async(req, res)=>{
-    try{
+export const imageMessageController = async (req, res) => {
+    try {
         const userId = req.user._id;
 
-        if(req.user.credits<2)
-        {
-            return res.json({success: false, message: "You don't have enough credits to use this feature"})
+        if (req.user.credits < 2) {
+            return res.json({
+                success: false,
+                message: "You don't have enough credits to use this feature"
+            });
         }
-        const {prompt, chatId, isPublished} = req.body
 
-        const chat = await Chat.findOne({userId, _id: chatId})
+        const { prompt, chatId, isPublished } = req.body;
 
-        //push user msg
+        const chat = await Chat.findOne({
+            userId,
+            _id: chatId
+        });
+
+        if (!chat) {
+            return res.json({
+                success: false,
+                message: "Chat not found"
+            });
+        }
+
+        // Save user message
         chat.messages.push({
-            role: "user", content: prompt, timestamp: Date.now(), isImage: false 
-        })
+            role: "user",
+            content: prompt,
+            timestamp: Date.now(),
+            isImage: false
+        });
 
-        // encode the prompt 
-        const encodedPrompt = encodeURIComponent(prompt)
+        // Encode prompt
+        const encodedPrompt = encodeURIComponent(prompt);
 
-        //construct imagekit AI generation url
-        const generatedImageUrl = `${process.env.IMAGEKIT_URL_ENDPOINT}/ik-genimg-prompt-${encodedPrompt}/quickgpt/${Date.now()}.png?tr=w-800, h-800`;
+        // Generate image directly using ImageKit
+        const generatedImageUrl =
+            `${process.env.IMAGEKIT_URL_ENDPOINT}/ik-genimg-prompt-${encodedPrompt}/quickgpt/${Date.now()}.png`;
 
-        //trigger generation by fetching from tmagekit
-        const aiImageResponse = await axios.get(generatedImageUrl, {responseType: "arraybuffer"})
+        console.log("Generated Image URL:");
+        console.log(generatedImageUrl);
 
-        //convert to base64
-        const base64Image = `data:image/png;base64,${Buffer.from(aiImageResponse.data,"binary").toString('base64')}`;
-
-        //upload to imagekit media library
-        const uploadResponse = await imagekit.upload({
-            file: base64Image,
-            fileName: `${Date.now()}.png`,
-            folder: "quickgpt"
-        })
         const reply = {
-            role: 'assistant',
-            content: uploadResponse.url,
+            role: "assistant",
+            content: generatedImageUrl,
             timestamp: Date.now(),
             isImage: true,
             isPublished
-        }
-    res.json({success: true, reply})
+        };
 
-    chat.messages.push(reply)
-    await chat.save() 
+        chat.messages.push(reply);
 
-    await User.updateOne({_id: userId}, {$inc: {credits: -2}})
+        await chat.save();
 
-    } catch(error)
-    {
-        res.json({success: false, message: error.message});
+        await User.updateOne(
+            { _id: userId },
+            { $inc: { credits: -2 } }
+        );
+
+        return res.json({
+            success: true,
+            reply
+        });
+
+    } catch (error) {
+        console.log("IMAGE ERROR:", error);
+
+        return res.json({
+            success: false,
+            message: error.message
+        });
     }
-}
+};
 //this is the solution for the actual workflow
 //that's why the program is structured in this way, to ensure that the user has enough credits before proceeding with the AI generation and to handle the image generation and upload process seamlessly.
 //so, the workflow is as follows:
