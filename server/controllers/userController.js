@@ -121,3 +121,4 @@ export const getPublishedImages = async (req,res) => {
     }
 }
 //it is the api controller for updating a chat name
+//this section is for updating the chat name in the database
